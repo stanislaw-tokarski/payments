@@ -22,9 +22,9 @@ public class PaymentsService {
         BigDecimal amount = transaction.getAmount();
         try {
             final Account origin = fetchAndSubtract(originAccountId, amount);
-            accounts.modifyAccount(origin);
+            accounts.overwriteAccount(origin);
             final Account destination = fetchAndAdd(destinationAccountId, amount);
-            accounts.modifyAccount(destination);
+            accounts.overwriteAccount(destination);
         } catch (NotEnoughFundsException e) {
             e.printStackTrace();
         }

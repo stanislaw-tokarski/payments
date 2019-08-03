@@ -27,7 +27,7 @@ public class AccountsDatastore {
         return account;
     }
 
-    public void modifyAccount(Account account) {
+    public void overwriteAccount(Account account) {
         accounts.replace(account.getId(), account);
     }
 }
