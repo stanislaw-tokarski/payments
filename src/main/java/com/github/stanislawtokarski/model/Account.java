@@ -1,5 +1,6 @@
 package com.github.stanislawtokarski.model;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.github.stanislawtokarski.exception.NotEnoughFundsException;
 
 import java.math.BigDecimal;
@@ -11,7 +12,9 @@ public class Account {
     private final UUID id;
     private BigDecimal balance;
 
-    public Account(UUID id, BigDecimal balance) {
+    public Account(
+            @JsonProperty("id") UUID id,
+            @JsonProperty("balance") BigDecimal balance) {
         this.id = id;
         this.balance = balance;
     }
