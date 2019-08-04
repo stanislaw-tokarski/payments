@@ -40,6 +40,14 @@ public class Account {
         return Objects.hash(getId());
     }
 
+    @Override
+    public String toString() {
+        return "Account{" +
+                "id=" + id +
+                ", balance=" + balance +
+                '}';
+    }
+
     public void add(BigDecimal amount) {
         this.balance = this.balance.add(amount);
     }

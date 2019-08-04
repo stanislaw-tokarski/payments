@@ -31,4 +31,13 @@ public class Transaction {
     public UUID getDestinationAccountId() {
         return destinationAccountId;
     }
+
+    @Override
+    public String toString() {
+        return "Transaction{" +
+                "amount=" + amount +
+                ", originAccountId=" + originAccountId +
+                ", destinationAccountId=" + destinationAccountId +
+                '}';
+    }
 }

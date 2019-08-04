@@ -2,6 +2,7 @@ package com.github.stanislawtokarski.service;
 
 import com.github.stanislawtokarski.exception.AccountAlreadyExistsException;
 import com.github.stanislawtokarski.exception.AccountNotFoundException;
+import com.github.stanislawtokarski.exception.NotEnoughFundsException;
 import com.github.stanislawtokarski.model.Account;
 import com.github.stanislawtokarski.model.AccountsDatastore;
 import com.github.stanislawtokarski.model.Transaction;
@@ -19,7 +20,7 @@ class PaymentsServiceTest {
     private PaymentsService paymentsService = new PaymentsService(accountsDatastore);
 
     @Test
-    void shouldCorrectlyPerformMoneyTransfer() {
+    void shouldCorrectlyPerformMoneyTransfer() throws NotEnoughFundsException {
         //given
         Account origin = new Account(UUID.randomUUID(), new BigDecimal("100.0"));
         Account destination = new Account(UUID.randomUUID(), new BigDecimal("10.0"));
@@ -38,7 +39,7 @@ class PaymentsServiceTest {
     }
 
     @Test
-    void shouldNotTransferMoneyWhenAccountBalanceIsInsufficient() {
+    void shouldNotTransferMoneyWhenAccountBalanceIsInsufficient() throws NotEnoughFundsException {
         //given
         Account origin = new Account(UUID.randomUUID(), new BigDecimal("100.0"));
         Account destination = new Account(UUID.randomUUID(), new BigDecimal("10.0"));
@@ -47,7 +48,7 @@ class PaymentsServiceTest {
         Transaction transaction = new Transaction(new BigDecimal("110.0"), origin.getId(), destination.getId());
 
         //when
-        paymentsService.transfer(transaction);
+        assertThrows(NotEnoughFundsException.class, () -> paymentsService.transfer(transaction));
 
         //then
         Account originAfterTransfer = paymentsService.fetchAccount(origin.getId());
@@ -58,50 +59,33 @@ class PaymentsServiceTest {
 
     @Test
     void shouldNotTransferMoneyFromNonExistingAccount() {
-        //given
         Account destination = new Account(UUID.randomUUID(), new BigDecimal("0.1"));
         paymentsService.addAccount(destination);
         Transaction transaction = new Transaction(new BigDecimal("0.1"), UUID.randomUUID(), destination.getId());
 
-        //when
-
-        //then
         assertThrows(AccountNotFoundException.class, () -> paymentsService.transfer(transaction));
     }
 
     @Test
     void shouldNotTransferMoneyToNonExistingAccount() {
-        //given
         Account origin = new Account(UUID.randomUUID(), new BigDecimal("0.1"));
         paymentsService.addAccount(origin);
         Transaction transaction = new Transaction(new BigDecimal("0.1"), origin.getId(), UUID.randomUUID());
 
-        //when
-
-        //then
         assertThrows(AccountNotFoundException.class, () -> paymentsService.transfer(transaction));
     }
 
     @Test
     void shouldNotAddAccountToDatastoreIfItAlreadyExists() {
-        //given
         Account account = new Account(UUID.randomUUID(), new BigDecimal("1000.0"));
         Account duplicatedAccount = new Account(account.getId(), new BigDecimal("0.0"));
         paymentsService.addAccount(account);
 
-        //when
-
-        //then
         assertThrows(AccountAlreadyExistsException.class, () -> paymentsService.addAccount(duplicatedAccount));
     }
 
     @Test
     void shouldNotFetchDataOfNonExistingAccount() {
-        //given
-
-        //when
-
-        //then
         assertThrows(AccountNotFoundException.class, () -> paymentsService.fetchAccount(UUID.randomUUID()));
     }
 }

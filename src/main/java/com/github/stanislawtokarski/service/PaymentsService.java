@@ -16,18 +16,14 @@ public class PaymentsService {
         this.accounts = accounts;
     }
 
-    public synchronized void transfer(Transaction transaction) {
+    public synchronized void transfer(Transaction transaction) throws NotEnoughFundsException {
         UUID originAccountId = transaction.getOriginAccountId();
         UUID destinationAccountId = transaction.getDestinationAccountId();
         BigDecimal amount = transaction.getAmount();
-        try {
-            final Account origin = fetchAndSubtract(originAccountId, amount);
-            accounts.overwriteAccount(origin);
-            final Account destination = fetchAndAdd(destinationAccountId, amount);
-            accounts.overwriteAccount(destination);
-        } catch (NotEnoughFundsException e) {
-            e.printStackTrace();
-        }
+        final Account origin = fetchAndSubtract(originAccountId, amount);
+        accounts.overwriteAccount(origin);
+        final Account destination = fetchAndAdd(destinationAccountId, amount);
+        accounts.overwriteAccount(destination);
     }
 
     public void addAccount(Account account) {

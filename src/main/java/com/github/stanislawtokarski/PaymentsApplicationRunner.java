@@ -1,6 +1,6 @@
 package com.github.stanislawtokarski;
 
-import com.github.stanislawtokarski.controller.PaymentsController;
+import com.github.stanislawtokarski.controller.PaymentsRestController;
 import com.github.stanislawtokarski.model.AccountsDatastore;
 import com.github.stanislawtokarski.service.PaymentsService;
 
@@ -10,15 +10,13 @@ public class PaymentsApplicationRunner {
     public static void main(String[] args) {
         AccountsDatastore accountsDatastore = new AccountsDatastore();
         PaymentsService paymentsService = new PaymentsService(accountsDatastore);
-        PaymentsController paymentsController = new PaymentsController(paymentsService);
+        PaymentsRestController paymentsController = new PaymentsRestController(paymentsService);
 
         path("/accounts", () -> {
-            post("/", paymentsController.generateAccount());
-            post("/:id", paymentsController.addAccount());
+            post("/create", paymentsController.generateAccount());
+            post("/create/:id", paymentsController.addAccount());
             get("/:id", paymentsController.getAccount());
         });
-        path("/transactions", () -> {
-            post("/", paymentsController.transfer());
-        });
+        path("/payments", () -> post("", paymentsController.transfer()));
     }
 }
