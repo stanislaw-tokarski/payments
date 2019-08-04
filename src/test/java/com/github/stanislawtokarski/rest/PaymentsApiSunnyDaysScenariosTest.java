@@ -17,7 +17,7 @@ import static org.eclipse.jetty.http.HttpStatus.OK_200;
 import static org.hamcrest.Matchers.equalTo;
 
 @ExtendWith(PaymentsApiContextAsParameterExtension.class)
-class PaymentsApiSunnyDaysScenarios extends PaymentsApiTest {
+class PaymentsApiSunnyDaysScenariosTest extends PaymentsApiTest {
 
     @Test
     void shouldAddNewAccount(PaymentsApiContext context) {

@@ -20,15 +20,19 @@ public class AccountsDatastore {
         accounts.put(accountId, account);
     }
 
-    public Account fetchAccount(UUID accountId) {
-        final Account account = accounts.get(accountId);
-        if (account == null) {
+    public Account fetchAccount(UUID accountId) throws AccountNotFoundException {
+        if (!accounts.containsKey(accountId)) {
             throw new AccountNotFoundException(String.format("Account %s not found", accountId.toString()));
         }
-        return account;
+        return accounts.get(accountId);
     }
 
     public void overwriteAccount(Account account) {
         accounts.replace(account.getId(), account);
+    }
+
+    //Visible for testing
+    Map<UUID, Account> getAccounts() {
+        return accounts;
     }
 }

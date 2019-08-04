@@ -39,7 +39,7 @@ class PaymentsServiceTest {
     }
 
     @Test
-    void shouldNotTransferMoneyWhenAccountBalanceIsInsufficient() throws NotEnoughFundsException {
+    void shouldNotTransferMoneyWhenAccountBalanceIsInsufficient() {
         //given
         Account origin = new Account(UUID.randomUUID(), new BigDecimal("100.0"));
         Account destination = new Account(UUID.randomUUID(), new BigDecimal("10.0"));

@@ -41,15 +41,17 @@ public class Account {
     }
 
     public void add(BigDecimal amount) {
-        this.balance = this.balance.add(amount);
+        balance = balance.add(amount);
     }
 
     public void subtract(BigDecimal amount) throws NotEnoughFundsException {
-        if (this.balance.compareTo(amount) < 0) {
+        if (balance.compareTo(amount) >= 0) {
+            balance = balance.subtract(amount);
+        } else {
             throw new NotEnoughFundsException(String.format(
                     "Cannot subtract %s from %s account because of insufficient balance",
-                    amount.toString(), this.id.toString()));
+                    amount.toString(),
+                    id.toString()));
         }
-        this.balance = this.balance.subtract(amount);
     }
 }

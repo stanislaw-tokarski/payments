@@ -17,7 +17,7 @@ import static org.eclipse.jetty.http.HttpStatus.*;
 import static org.hamcrest.Matchers.equalTo;
 
 @ExtendWith(PaymentsApiContextAsParameterExtension.class)
-class PaymentsApiRainyDaysScenarios extends PaymentsApiTest {
+class PaymentsApiRainyDaysScenariosTest extends PaymentsApiTest {
 
     private static final String NON_EXISTING_ACCOUNT_ID = "f5ebb38b-36ac-4e77-b028-6ab326cb09db";
 
