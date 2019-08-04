@@ -2,8 +2,8 @@ package com.github.stanislawtokarski.service;
 
 import com.github.stanislawtokarski.exception.NotEnoughFundsException;
 import com.github.stanislawtokarski.model.Account;
-import com.github.stanislawtokarski.repository.AccountsDatastore;
 import com.github.stanislawtokarski.model.Transaction;
+import com.github.stanislawtokarski.repository.AccountsDatastore;
 
 import java.math.BigDecimal;
 import java.util.UUID;

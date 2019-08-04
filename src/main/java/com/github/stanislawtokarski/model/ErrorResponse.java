@@ -13,11 +13,11 @@ public class ErrorResponse {
         this.message = message;
     }
 
-    @Override
-    public String toString() {
-        return "{" +
-                "status=" + status +
-                ", message='" + message + '\'' +
-                '}';
+    public int getStatus() {
+        return status;
+    }
+
+    public String getMessage() {
+        return message;
     }
 }
