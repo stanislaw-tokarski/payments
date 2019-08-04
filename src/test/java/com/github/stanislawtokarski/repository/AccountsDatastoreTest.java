@@ -22,7 +22,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class AccountsDatastoreTest {
 
-    private final int ACCOUNTS_NUMBER = 1000;
+    private final int ACCOUNTS_NUMBER = 100;
     private final int TRANSACTIONS_NUMBER = 1000000;
     private final BigDecimal INITIAL_ACCOUNT_BALANCE = new BigDecimal(100);
     private final UUID[] accountsIds = new UUID[ACCOUNTS_NUMBER];
@@ -50,6 +50,7 @@ class AccountsDatastoreTest {
 
         //when
         executorService.invokeAll(prepareRandomPayments());
+        executorService.shutdown();
 
         //then
         final BigDecimal fundsAmountAfterPayments = sumUpFundsOnAllAccounts();
@@ -67,15 +68,15 @@ class AccountsDatastoreTest {
                             accountsIds[random.nextInt(ACCOUNTS_NUMBER)]);
                     try {
                         paymentsService.transfer(transaction);
-//                        System.out.println(String.format("%s: Transferred %s from %s to %s",
-//                                Thread.currentThread().getName(),
-//                                transaction.getAmount(),
-//                                transaction.getOriginAccountId(),
-//                                transaction.getDestinationAccountId()));
+                        System.out.println(String.format("%s: Transferred %s from %s to %s",
+                                Thread.currentThread().getName(),
+                                transaction.getAmount(),
+                                transaction.getOriginAccountId(),
+                                transaction.getDestinationAccountId()));
                     } catch (NotEnoughFundsException | AccountNotFoundException e) {
-//                        System.out.println(String.format("%s: %s",
-//                                Thread.currentThread().getName(),
-//                                e.getMessage()));
+                        System.out.println(String.format("%s: %s",
+                                Thread.currentThread().getName(),
+                                e.getMessage()));
                     }
                     return null;
                 }));
