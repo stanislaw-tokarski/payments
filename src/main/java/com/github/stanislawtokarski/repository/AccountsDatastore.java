@@ -1,7 +1,8 @@
-package com.github.stanislawtokarski.model;
+package com.github.stanislawtokarski.repository;
 
 import com.github.stanislawtokarski.exception.AccountAlreadyExistsException;
 import com.github.stanislawtokarski.exception.AccountNotFoundException;
+import com.github.stanislawtokarski.model.Account;
 
 import java.util.Map;
 import java.util.UUID;

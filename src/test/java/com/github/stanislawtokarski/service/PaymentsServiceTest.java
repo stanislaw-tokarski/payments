@@ -4,7 +4,7 @@ import com.github.stanislawtokarski.exception.AccountAlreadyExistsException;
 import com.github.stanislawtokarski.exception.AccountNotFoundException;
 import com.github.stanislawtokarski.exception.NotEnoughFundsException;
 import com.github.stanislawtokarski.model.Account;
-import com.github.stanislawtokarski.model.AccountsDatastore;
+import com.github.stanislawtokarski.repository.AccountsDatastore;
 import com.github.stanislawtokarski.model.Transaction;
 import org.junit.jupiter.api.Test;
 

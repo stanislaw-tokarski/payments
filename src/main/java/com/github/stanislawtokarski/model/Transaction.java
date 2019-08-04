@@ -34,7 +34,7 @@ public class Transaction {
 
     @Override
     public String toString() {
-        return "Transaction{" +
+        return "{" +
                 "amount=" + amount +
                 ", originAccountId=" + originAccountId +
                 ", destinationAccountId=" + destinationAccountId +

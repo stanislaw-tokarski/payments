@@ -1,7 +1,7 @@
 package com.github.stanislawtokarski;
 
 import com.github.stanislawtokarski.controller.PaymentsRestController;
-import com.github.stanislawtokarski.model.AccountsDatastore;
+import com.github.stanislawtokarski.repository.AccountsDatastore;
 import com.github.stanislawtokarski.service.PaymentsService;
 
 import static spark.Spark.*;

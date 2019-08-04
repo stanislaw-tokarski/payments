@@ -15,7 +15,7 @@ public class ErrorResponse {
 
     @Override
     public String toString() {
-        return "ErrorResponse{" +
+        return "{" +
                 "status=" + status +
                 ", message='" + message + '\'' +
                 '}';
