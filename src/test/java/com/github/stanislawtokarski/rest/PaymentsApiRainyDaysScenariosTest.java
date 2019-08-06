@@ -74,8 +74,8 @@ class PaymentsApiRainyDaysScenariosTest extends PaymentsApiTest {
                 .then()
                 .assertThat()
                 .statusCode(OK_200)
-                .body("id", equalTo(destinationAccount.getId()))
-                .body("balance", equalTo(destinationAccount.getBalance()));
+                .body("id", equalTo(destinationAccount.getId().toString()))
+                .body("balance", equalTo(destinationAccount.getBalance().intValue()));
     }
 
     @Test
@@ -105,8 +105,8 @@ class PaymentsApiRainyDaysScenariosTest extends PaymentsApiTest {
                 .then()
                 .assertThat()
                 .statusCode(OK_200)
-                .body("id", equalTo(originAccount.getId()))
-                .body("balance", equalTo(originAccount.getBalance()));
+                .body("id", equalTo(originAccount.getId().toString()))
+                .body("balance", equalTo(originAccount.getBalance().intValue()));
     }
 
     @Test
@@ -141,14 +141,14 @@ class PaymentsApiRainyDaysScenariosTest extends PaymentsApiTest {
                 .then()
                 .assertThat()
                 .statusCode(OK_200)
-                .body("id", equalTo(originAccount.getId()))
-                .body("balance", equalTo(originAccount.getBalance()));
+                .body("id", equalTo(originAccount.getId().toString()))
+                .body("balance", equalTo(originAccount.getBalance().intValue()));
         when()
                 .get(context.getPaymentsApiUrl() + GET_ACCOUNT_PATH + SLASH + destinationAccount.getId())
                 .then()
                 .assertThat()
                 .statusCode(OK_200)
-                .body("id", equalTo(destinationAccount.getId()))
-                .body("balance", equalTo(destinationAccount.getBalance()));
+                .body("id", equalTo(destinationAccount.getId().toString()))
+                .body("balance", equalTo(destinationAccount.getBalance().intValue()));
     }
 }

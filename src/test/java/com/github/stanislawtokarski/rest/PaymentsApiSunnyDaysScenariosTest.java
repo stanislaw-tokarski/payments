@@ -80,22 +80,22 @@ class PaymentsApiSunnyDaysScenariosTest extends PaymentsApiTest {
                 .then()
                 .assertThat()
                 .statusCode(OK_200)
-                .body("amount", equalTo(amount))
-                .body("originAccountId", equalTo(originAccount.getId()))
-                .body("destinationAccountId", equalTo(destinationAccount.getId()));
+                .body("amount", equalTo(amount.floatValue()))
+                .body("originAccountId", equalTo(originAccount.getId().toString()))
+                .body("destinationAccountId", equalTo(destinationAccount.getId().toString()));
         when()
                 .get(context.getPaymentsApiUrl() + GET_ACCOUNT_PATH + SLASH + originAccount.getId())
                 .then()
                 .assertThat()
                 .statusCode(OK_200)
-                .body("id", equalTo(originAccount.getId()))
-                .body("balance", equalTo(originAccount.getBalance().subtract(amount)));
+                .body("id", equalTo(originAccount.getId().toString()))
+                .body("balance", equalTo(originAccount.getBalance().subtract(amount).floatValue()));
         when()
                 .get(context.getPaymentsApiUrl() + GET_ACCOUNT_PATH + SLASH + destinationAccount.getId())
                 .then()
                 .assertThat()
                 .statusCode(OK_200)
-                .body("id", equalTo(destinationAccount.getId()))
-                .body("balance", equalTo(destinationAccount.getBalance().add(amount)));
+                .body("id", equalTo(destinationAccount.getId().toString()))
+                .body("balance", equalTo(destinationAccount.getBalance().add(amount).floatValue()));
     }
 }

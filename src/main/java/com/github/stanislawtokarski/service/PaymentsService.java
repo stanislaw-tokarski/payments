@@ -22,8 +22,10 @@ public class PaymentsService {
         UUID destinationAccountId = transaction.getDestinationAccountId();
         BigDecimal amount = transaction.getAmount();
         synchronized (accounts) {
-            final Account origin = fetchAndSubtract(originAccountId, amount);
-            final Account destination = fetchAndAdd(destinationAccountId, amount);
+            final Account origin = fetchAccount(originAccountId);
+            final Account destination = fetchAccount(destinationAccountId);
+            origin.subtract(amount);
+            destination.add(amount);
             accounts.overwriteAccount(origin);
             accounts.overwriteAccount(destination);
         }
@@ -35,17 +37,5 @@ public class PaymentsService {
 
     public Account fetchAccount(UUID id) throws AccountNotFoundException {
         return accounts.fetchAccount(id);
-    }
-
-    private Account fetchAndSubtract(UUID id, BigDecimal amount) throws NotEnoughFundsException, AccountNotFoundException {
-        final Account processed = accounts.fetchAccount(id);
-        processed.subtract(amount);
-        return processed;
-    }
-
-    private Account fetchAndAdd(UUID id, BigDecimal amount) throws AccountNotFoundException {
-        final Account processed = accounts.fetchAccount(id);
-        processed.add(amount);
-        return processed;
     }
 }
