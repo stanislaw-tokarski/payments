@@ -36,10 +36,10 @@ class PaymentsApiRainyDaysScenariosTest extends PaymentsApiTest {
     void shouldNotCreateAccountIfIdAlreadyInUse(PaymentsApiContext context) {
         String id = "8a1b7c6e-012c-4f87-b816-10ea309f10ef";
         given()
-                .post(context.getPaymentsApiUrl() + CREATE_ACCOUNT_PATH + id);
+                .post(context.getPaymentsApiUrl() + CREATE_ACCOUNT_PATH + SLASH + id);
 
         when()
-                .post(context.getPaymentsApiUrl() + CREATE_ACCOUNT_PATH + id)
+                .post(context.getPaymentsApiUrl() + CREATE_ACCOUNT_PATH + SLASH + id)
                 .then()
                 .assertThat()
                 .statusCode(CONFLICT_409)
@@ -70,7 +70,7 @@ class PaymentsApiRainyDaysScenariosTest extends PaymentsApiTest {
                 .body("status", equalTo(NOT_FOUND_404))
                 .body("message", equalTo("Account with given ID does not exist"));
         when()
-                .get(context.getPaymentsApiUrl() + GET_ACCOUNT_PATH + destinationAccount.getId())
+                .get(context.getPaymentsApiUrl() + GET_ACCOUNT_PATH + SLASH + destinationAccount.getId())
                 .then()
                 .assertThat()
                 .statusCode(OK_200)
@@ -101,7 +101,7 @@ class PaymentsApiRainyDaysScenariosTest extends PaymentsApiTest {
                 .body("status", equalTo(NOT_FOUND_404))
                 .body("message", equalTo("Account with given ID does not exist"));
         when()
-                .get(context.getPaymentsApiUrl() + GET_ACCOUNT_PATH + originAccount.getId())
+                .get(context.getPaymentsApiUrl() + GET_ACCOUNT_PATH + SLASH + originAccount.getId())
                 .then()
                 .assertThat()
                 .statusCode(OK_200)
@@ -137,14 +137,14 @@ class PaymentsApiRainyDaysScenariosTest extends PaymentsApiTest {
                 .body("status", equalTo(BAD_REQUEST_400))
                 .body("message", equalTo("Payment cannot be processed because of insufficient funds amount"));
         when()
-                .get(context.getPaymentsApiUrl() + GET_ACCOUNT_PATH + originAccount.getId())
+                .get(context.getPaymentsApiUrl() + GET_ACCOUNT_PATH + SLASH + originAccount.getId())
                 .then()
                 .assertThat()
                 .statusCode(OK_200)
                 .body("id", equalTo(originAccount.getId()))
                 .body("balance", equalTo(originAccount.getBalance()));
         when()
-                .get(context.getPaymentsApiUrl() + GET_ACCOUNT_PATH + destinationAccount.getId())
+                .get(context.getPaymentsApiUrl() + GET_ACCOUNT_PATH + SLASH + destinationAccount.getId())
                 .then()
                 .assertThat()
                 .statusCode(OK_200)

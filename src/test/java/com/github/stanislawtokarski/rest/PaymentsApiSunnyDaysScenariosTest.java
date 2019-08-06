@@ -22,7 +22,7 @@ class PaymentsApiSunnyDaysScenariosTest extends PaymentsApiTest {
     @Test
     void shouldAddNewAccount(PaymentsApiContext context) {
         when()
-                .post(context.getPaymentsApiUrl() + "/accounts/create")
+                .post(context.getPaymentsApiUrl() + CREATE_ACCOUNT_PATH)
                 .then()
                 .assertThat()
                 .statusCode(CREATED_201)
@@ -33,7 +33,7 @@ class PaymentsApiSunnyDaysScenariosTest extends PaymentsApiTest {
     void shouldAddNewAccountWithPredefinedId(PaymentsApiContext context) {
         String id = "128eb157-a517-4eb6-920b-2f7a571b73af";
         when()
-                .post(context.getPaymentsApiUrl() + CREATE_ACCOUNT_PATH + id)
+                .post(context.getPaymentsApiUrl() + CREATE_ACCOUNT_PATH + SLASH + id)
                 .then()
                 .assertThat()
                 .statusCode(CREATED_201)
@@ -45,9 +45,9 @@ class PaymentsApiSunnyDaysScenariosTest extends PaymentsApiTest {
     void shouldReturnDetailsOfExistingAccount(PaymentsApiContext context) {
         String id = "f9977178-7189-4cf8-9e4b-545a0f096954";
 
-        given().post(context.getPaymentsApiUrl() + CREATE_ACCOUNT_PATH + id);
+        given().post(context.getPaymentsApiUrl() + CREATE_ACCOUNT_PATH + SLASH + id);
 
-        when().get(context.getPaymentsApiUrl() + GET_ACCOUNT_PATH + id)
+        when().get(context.getPaymentsApiUrl() + GET_ACCOUNT_PATH + SLASH + id)
                 .then()
                 .assertThat()
                 .statusCode(OK_200)
@@ -84,14 +84,14 @@ class PaymentsApiSunnyDaysScenariosTest extends PaymentsApiTest {
                 .body("originAccountId", equalTo(originAccount.getId()))
                 .body("destinationAccountId", equalTo(destinationAccount.getId()));
         when()
-                .get(context.getPaymentsApiUrl() + GET_ACCOUNT_PATH + originAccount.getId())
+                .get(context.getPaymentsApiUrl() + GET_ACCOUNT_PATH + SLASH + originAccount.getId())
                 .then()
                 .assertThat()
                 .statusCode(OK_200)
                 .body("id", equalTo(originAccount.getId()))
                 .body("balance", equalTo(originAccount.getBalance().subtract(amount)));
         when()
-                .get(context.getPaymentsApiUrl() + GET_ACCOUNT_PATH + destinationAccount.getId())
+                .get(context.getPaymentsApiUrl() + GET_ACCOUNT_PATH + SLASH + destinationAccount.getId())
                 .then()
                 .assertThat()
                 .statusCode(OK_200)
