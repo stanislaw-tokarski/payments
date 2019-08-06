@@ -1,16 +1,16 @@
 package com.github.stanislawtokarski.repository;
 
-import com.github.stanislawtokarski.exception.AccountAlreadyExistsException;
-import com.github.stanislawtokarski.exception.AccountNotFoundException;
 import com.github.stanislawtokarski.model.Account;
+import com.github.stanislawtokarski.model.exception.AccountAlreadyExistsException;
+import com.github.stanislawtokarski.model.exception.AccountNotFoundException;
 
+import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
-import java.util.concurrent.ConcurrentHashMap;
 
 public class AccountsDatastore {
 
-    private final Map<UUID, Account> accounts = new ConcurrentHashMap<>();
+    private final Map<UUID, Account> accounts = new HashMap<>();
 
     public void addAccount(Account account) {
         final UUID accountId = account.getId();

@@ -80,7 +80,7 @@ class PaymentsApiRainyDaysScenariosTest extends PaymentsApiTest {
 
     @Test
     void shouldNotTransferMoneyToNonExistingAccount(PaymentsApiContext context) throws JsonProcessingException {
-        Account originAccount = given()
+        Account originAccount = when()
                 .post(context.getPaymentsApiUrl() + CREATE_ACCOUNT_PATH)
                 .then()
                 .extract()

@@ -1,9 +1,9 @@
 package com.github.stanislawtokarski.service;
 
-import com.github.stanislawtokarski.exception.AccountNotFoundException;
-import com.github.stanislawtokarski.exception.NotEnoughFundsException;
 import com.github.stanislawtokarski.model.Account;
 import com.github.stanislawtokarski.model.Transaction;
+import com.github.stanislawtokarski.model.exception.AccountNotFoundException;
+import com.github.stanislawtokarski.model.exception.NotEnoughFundsException;
 import com.github.stanislawtokarski.repository.AccountsDatastore;
 
 import java.math.BigDecimal;
@@ -17,14 +17,16 @@ public class PaymentsService {
         this.accounts = accounts;
     }
 
-    public synchronized void transfer(Transaction transaction) throws NotEnoughFundsException, AccountNotFoundException {
+    public void transfer(Transaction transaction) throws NotEnoughFundsException, AccountNotFoundException {
         UUID originAccountId = transaction.getOriginAccountId();
         UUID destinationAccountId = transaction.getDestinationAccountId();
         BigDecimal amount = transaction.getAmount();
-        final Account origin = fetchAndSubtract(originAccountId, amount);
-        final Account destination = fetchAndAdd(destinationAccountId, amount);
-        accounts.overwriteAccount(origin);
-        accounts.overwriteAccount(destination);
+        synchronized (accounts) {
+            final Account origin = fetchAndSubtract(originAccountId, amount);
+            final Account destination = fetchAndAdd(destinationAccountId, amount);
+            accounts.overwriteAccount(origin);
+            accounts.overwriteAccount(destination);
+        }
     }
 
     public void addAccount(Account account) {

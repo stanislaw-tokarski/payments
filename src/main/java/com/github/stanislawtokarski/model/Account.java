@@ -1,7 +1,7 @@
 package com.github.stanislawtokarski.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.github.stanislawtokarski.exception.NotEnoughFundsException;
+import com.github.stanislawtokarski.model.exception.NotEnoughFundsException;
 
 import java.math.BigDecimal;
 import java.util.Objects;

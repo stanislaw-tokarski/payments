@@ -1,9 +1,9 @@
 package com.github.stanislawtokarski.repository;
 
-import com.github.stanislawtokarski.exception.AccountNotFoundException;
-import com.github.stanislawtokarski.exception.NotEnoughFundsException;
 import com.github.stanislawtokarski.model.Account;
 import com.github.stanislawtokarski.model.Transaction;
+import com.github.stanislawtokarski.model.exception.AccountNotFoundException;
+import com.github.stanislawtokarski.model.exception.NotEnoughFundsException;
 import com.github.stanislawtokarski.service.PaymentsService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -22,7 +22,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class AccountsDatastoreTest {
 
-    private final int ACCOUNTS_NUMBER = 100;
+    private final int ACCOUNTS_NUMBER = 1000;
     private final int TRANSACTIONS_NUMBER = 1000000;
     private final BigDecimal INITIAL_ACCOUNT_BALANCE = new BigDecimal(100);
     private final UUID[] accountsIds = new UUID[ACCOUNTS_NUMBER];
@@ -68,19 +68,18 @@ class AccountsDatastoreTest {
                             accountsIds[random.nextInt(ACCOUNTS_NUMBER)]);
                     try {
                         paymentsService.transfer(transaction);
-                        System.out.println(String.format("%s: Transferred %s from %s to %s",
-                                Thread.currentThread().getName(),
-                                transaction.getAmount(),
-                                transaction.getOriginAccountId(),
-                                transaction.getDestinationAccountId()));
+//                        System.out.println(String.format("%s: Transferred %s from %s to %s",
+//                                Thread.currentThread().getName(),
+//                                transaction.getAmount(),
+//                                transaction.getOriginAccountId(),
+//                                transaction.getDestinationAccountId()));
                     } catch (NotEnoughFundsException | AccountNotFoundException e) {
-                        System.out.println(String.format("%s: %s",
-                                Thread.currentThread().getName(),
-                                e.getMessage()));
+//                        System.out.println(String.format("%s: %s",
+//                                Thread.currentThread().getName(),
+//                                e.getMessage()));
                     }
                     return null;
                 }));
-
         return randomPayments;
     }
 
@@ -91,6 +90,6 @@ class AccountsDatastoreTest {
                 .stream()
                 .map(Account::getBalance)
                 .reduce(BigDecimal::add)
-                .get();
+                .orElseThrow(IllegalStateException::new);
     }
 }

@@ -1,27 +1,28 @@
 package com.github.stanislawtokarski.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.github.stanislawtokarski.exception.AccountAlreadyExistsException;
-import com.github.stanislawtokarski.exception.AccountNotFoundException;
-import com.github.stanislawtokarski.exception.NotEnoughFundsException;
 import com.github.stanislawtokarski.model.Account;
-import com.github.stanislawtokarski.model.ErrorResponse;
 import com.github.stanislawtokarski.model.Transaction;
+import com.github.stanislawtokarski.model.exception.AccountAlreadyExistsException;
+import com.github.stanislawtokarski.model.exception.AccountNotFoundException;
+import com.github.stanislawtokarski.model.exception.NotEnoughFundsException;
 import com.github.stanislawtokarski.service.PaymentsService;
+import com.github.stanislawtokarski.util.HttpResponseBuilder;
+import org.apache.http.entity.ContentType;
 import spark.Route;
 
 import java.math.BigDecimal;
 import java.util.UUID;
 
+import static org.apache.http.HttpHeaders.CONTENT_TYPE;
 import static org.eclipse.jetty.http.HttpStatus.*;
 
 public class PaymentsRestController {
 
-    private static final String CONTENT_TYPE = "Content-Type";
-    private static final String APPLICATION_JSON = "application/json";
+    private static final String APPLICATION_JSON = String.valueOf(ContentType.APPLICATION_JSON);
 
     private final PaymentsService paymentsService;
-    private ObjectMapper mapper = new ObjectMapper();
+    private final ObjectMapper mapper = new ObjectMapper();
 
     public PaymentsRestController(PaymentsService paymentsService) {
         this.paymentsService = paymentsService;
@@ -31,14 +32,13 @@ public class PaymentsRestController {
         return (request, response) -> {
             response.header(CONTENT_TYPE, APPLICATION_JSON);
             try {
-                UUID id = UUID.fromString(request.params(":id"));
+                final UUID id = UUID.fromString(request.params(":id"));
+                final Account account = paymentsService.fetchAccount(id);
                 response.status(OK_200);
-                return mapper.writeValueAsString(paymentsService.fetchAccount(id));
+                return HttpResponseBuilder.ofAccount(account);
             } catch (AccountNotFoundException e) {
                 response.status(NOT_FOUND_404);
-                return mapper.writeValueAsString(new ErrorResponse(
-                        NOT_FOUND_404,
-                        "Account with given ID does not exist"));
+                return HttpResponseBuilder.accountDoesNotExist();
             }
         };
     }
@@ -47,47 +47,42 @@ public class PaymentsRestController {
         return (request, response) -> {
             response.header(CONTENT_TYPE, APPLICATION_JSON);
             try {
-                Account account = new Account(UUID.fromString(request.params(":id")), BigDecimal.valueOf(100L));
-                response.status(CREATED_201);
+                final UUID id = UUID.fromString(request.params(":id"));
+                final Account account = new Account(id, BigDecimal.valueOf(100L));
                 paymentsService.addAccount(account);
-                return mapper.writeValueAsString(account);
+                response.status(CREATED_201);
+                return HttpResponseBuilder.ofAccount(account);
             } catch (AccountAlreadyExistsException e) {
                 response.status(CONFLICT_409);
-                return mapper.writeValueAsString(new ErrorResponse(
-                        CONFLICT_409,
-                        "Account with given ID already exists"));
+                return HttpResponseBuilder.accountAlreadyExists();
             }
         };
     }
 
     public Route generateAccount() {
         return (request, response) -> {
-            response.header(CONTENT_TYPE, APPLICATION_JSON);
-            Account account = new Account(UUID.randomUUID(), BigDecimal.valueOf(100L));
+            final Account account = new Account(UUID.randomUUID(), BigDecimal.valueOf(100L));
             paymentsService.addAccount(account);
+            response.header(CONTENT_TYPE, APPLICATION_JSON);
             response.status(CREATED_201);
-            return mapper.writeValueAsString(account);
+            return HttpResponseBuilder.ofAccount(account);
         };
     }
 
     public Route transfer() {
         return (request, response) -> {
             response.header(CONTENT_TYPE, APPLICATION_JSON);
-            Transaction transaction = mapper.readValue(request.body(), Transaction.class);
+            final Transaction transaction = mapper.readValue(request.body(), Transaction.class);
             try {
                 paymentsService.transfer(transaction);
                 response.status(OK_200);
-                return mapper.writeValueAsString(transaction);
+                return HttpResponseBuilder.ofTransaction(transaction);
             } catch (AccountNotFoundException e) {
                 response.status(NOT_FOUND_404);
-                return mapper.writeValueAsString(new ErrorResponse(
-                        NOT_FOUND_404,
-                        "Account with given ID does not exist"));
+                return HttpResponseBuilder.accountDoesNotExist();
             } catch (NotEnoughFundsException e) {
                 response.status(BAD_REQUEST_400);
-                return mapper.writeValueAsString(new ErrorResponse(
-                        BAD_REQUEST_400,
-                        "Payment cannot be processed because of insufficient funds amount"));
+                return HttpResponseBuilder.notEnoughFunds();
             }
         };
     }

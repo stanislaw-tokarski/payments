@@ -6,5 +6,5 @@ class PaymentsApiTest {
     static final String CREATE_ACCOUNT_PATH = "/accounts/create/";
     static final String GET_ACCOUNT_PATH = "/accounts/";
     static final String PAYMENTS_PATH = "/payments";
-    ObjectMapper mapper = new ObjectMapper();
+    final ObjectMapper mapper = new ObjectMapper();
 }
