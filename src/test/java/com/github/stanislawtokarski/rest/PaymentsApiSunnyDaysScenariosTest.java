@@ -83,6 +83,7 @@ class PaymentsApiSunnyDaysScenariosTest extends PaymentsApiTest {
                 .body("amount", equalTo(amount.floatValue()))
                 .body("originAccountId", equalTo(originAccount.getId().toString()))
                 .body("destinationAccountId", equalTo(destinationAccount.getId().toString()));
+
         when()
                 .get(context.getPaymentsApiUrl() + GET_ACCOUNT_PATH + SLASH + originAccount.getId())
                 .then()

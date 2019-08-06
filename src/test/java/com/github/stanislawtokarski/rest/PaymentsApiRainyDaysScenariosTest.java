@@ -35,8 +35,8 @@ class PaymentsApiRainyDaysScenariosTest extends PaymentsApiTest {
     @Test
     void shouldNotCreateAccountIfIdAlreadyInUse(PaymentsApiContext context) {
         String id = "8a1b7c6e-012c-4f87-b816-10ea309f10ef";
-        given()
-                .post(context.getPaymentsApiUrl() + CREATE_ACCOUNT_PATH + SLASH + id);
+
+        given().post(context.getPaymentsApiUrl() + CREATE_ACCOUNT_PATH + SLASH + id);
 
         when()
                 .post(context.getPaymentsApiUrl() + CREATE_ACCOUNT_PATH + SLASH + id)
@@ -69,6 +69,7 @@ class PaymentsApiRainyDaysScenariosTest extends PaymentsApiTest {
                 .statusCode(NOT_FOUND_404)
                 .body("status", equalTo(NOT_FOUND_404))
                 .body("message", equalTo("Account with given ID does not exist"));
+
         when()
                 .get(context.getPaymentsApiUrl() + GET_ACCOUNT_PATH + SLASH + destinationAccount.getId())
                 .then()
@@ -100,6 +101,7 @@ class PaymentsApiRainyDaysScenariosTest extends PaymentsApiTest {
                 .statusCode(NOT_FOUND_404)
                 .body("status", equalTo(NOT_FOUND_404))
                 .body("message", equalTo("Account with given ID does not exist"));
+
         when()
                 .get(context.getPaymentsApiUrl() + GET_ACCOUNT_PATH + SLASH + originAccount.getId())
                 .then()
@@ -136,6 +138,7 @@ class PaymentsApiRainyDaysScenariosTest extends PaymentsApiTest {
                 .statusCode(BAD_REQUEST_400)
                 .body("status", equalTo(BAD_REQUEST_400))
                 .body("message", equalTo("Payment cannot be processed because of insufficient funds amount"));
+
         when()
                 .get(context.getPaymentsApiUrl() + GET_ACCOUNT_PATH + SLASH + originAccount.getId())
                 .then()
