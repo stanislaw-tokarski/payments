@@ -1,5 +1,6 @@
 # Payments
-RESTful API for money transfers between accounts.
+RESTful API for money transfers between accounts
+
 ##API
 * **POST: http://localhost:4567/accounts/create**
 
@@ -84,7 +85,8 @@ Produces transaction details or response with proper error code and correspondin
     "message": "Account with given ID does not exist"
 }
 ````
-##Getting application up and running
+
+## Getting application up and running
 In order to build a project:
 ````
 mvn clean install -DskipTests
