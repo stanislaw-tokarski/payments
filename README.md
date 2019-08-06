@@ -1,7 +1,7 @@
 # Payments
 RESTful API for money transfers between accounts
 
-##API
+## API
 * **POST: http://localhost:4567/accounts/create**
 
 Consumes POST requests. When one is received, new account with random UUID and default balance (100.0) is created.
